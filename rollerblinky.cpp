@@ -17,33 +17,27 @@ cRGB color;
 void setup() {
   ledA.setOutput(&PORTH, &DDRH, PH4);
   ledB.setOutput(&PORTE, &DDRE, PE3);
-  ledC.setOutput(&PORTE, &DDRE, PE0);
+  ledC.setOutput(&PORTE, &DDRE, PE4);
 }
 
 void loop() {
-  color.r = 255;
-  color.g = 0;
-  color.b = 0;
   for(int i = 0; i < LED_COUNT_LONG; i++)
   {
-      ledA.set_crgb_at(i, color);
+    color.SetRGB(255, (i % 2) * 255, 0);
+    ledA.set_crgb_at(i, color);
   }
 
-  color.r = 0;
-  color.g = 255;
-  color.b = 0;
   for(int i = 0; i < LED_COUNT_SHORT; i++)
   {
-      ledB.set_crgb_at(i, color);
+    color.SetRGB(0, 255, (i % 2) * 255);
+    ledB.set_crgb_at(i, color);
   }
 
 
-  color.r = 0;
-  color.g = 0;
-  color.b = 255;
   for(int i = 0; i < LED_COUNT_LONG; i++)
   {
-      ledC.set_crgb_at(i, color);
+    color.SetRGB((i % 2 == 0) ? 0 : 255, 0, (i % 2 == 0) ? 255 : 64);
+    ledC.set_crgb_at(i, color);
   }
 
   ledA.sync();
@@ -51,15 +45,6 @@ void loop() {
   ledC.sync();
 
   _delay_ms(500);
-}
-
-int clampHue(int hue)
-{
-  if(hue > 360)
-  {
-      hue %= 360;
-  }
-  return hue;
 }
 
 int main() {

@@ -49,8 +49,14 @@ struct cRGB {
 	uint8_t r;
 	uint8_t b;
 
+	void SetRGB(uint8_t new_r, uint8_t new_g, uint8_t new_b) {
+		r = new_r;
+		g = new_g;
+		b = new_b;
+	}
+
 #ifdef USE_HSV
-	void SetHSV(int hue, uint8_t sat, uint8_t val) {
+	void SetHSV(uint16_t hue, uint8_t sat, uint8_t val) {
 		/* convert hue, saturation and brightness ( HSB/HSV ) to RGB
 		The dim_curve is used only on brightness/value and on saturation (inverted).
 		This looks the most natural.
@@ -59,7 +65,7 @@ struct cRGB {
 		val = dim_curve[val];
 		sat = 255 - dim_curve[255 - sat];
 
-		int base;
+		uint16_t base;
 
 		if (sat == 0) { // Acromatic color (gray). Hue doesn't mind.
 			r = val;

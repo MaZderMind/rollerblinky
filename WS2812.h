@@ -74,7 +74,7 @@ private:
 	uint8_t offsetBlue;
 #endif
 
-	void ws2812_sendarray_mask(uint8_t *array,uint16_t length, uint8_t pinmask,uint8_t *port, uint8_t *portreg);
+	void ws2812_sendarray_mask(uint8_t *array, uint16_t length, uint8_t pinmask, uint8_t *port);
 
 	const volatile uint8_t *ws2812_port;
 	volatile uint8_t *ws2812_port_reg;

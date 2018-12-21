@@ -71,7 +71,7 @@ uint8_t WS2812::set_subpixel_at(uint16_t index, uint8_t offset, uint8_t px_value
 
 void WS2812::sync() {
 	*ws2812_port_reg |= pinMask; // Enable DDR
-	ws2812_sendarray_mask(pixels,3*count_led,pinMask,(uint8_t*) ws2812_port,(uint8_t*) ws2812_port_reg );
+	ws2812_sendarray_mask(pixels, 3*count_led, pinMask,(uint8_t*) ws2812_port);
 }
 
 #ifdef RGB_ORDER_ON_RUNTIME
