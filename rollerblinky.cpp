@@ -24,20 +24,20 @@ void loop() {
   for(int i = 0; i < LED_COUNT_LONG; i++)
   {
     color.SetRGB(255, (i % 2) * 255, 0);
-    ledA.set_crgb_at(i, color);
+    ledA.setColorAt(i, color);
   }
 
   for(int i = 0; i < LED_COUNT_SHORT; i++)
   {
     color.SetRGB(0, 255, (i % 2) * 255);
-    ledB.set_crgb_at(i, color);
+    ledB.setColorAt(i, color);
   }
 
 
   for(int i = 0; i < LED_COUNT_LONG; i++)
   {
     color.SetRGB((i % 2 == 0) ? 0 : 255, 0, (i % 2 == 0) ? 255 : 64);
-    ledC.set_crgb_at(i, color);
+    ledC.setColorAt(i, color);
   }
 
   ledA.sync();

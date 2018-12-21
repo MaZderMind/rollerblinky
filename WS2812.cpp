@@ -26,7 +26,7 @@ WS2812::WS2812(uint16_t num_leds) {
 	#endif
 }
 
-cRGB WS2812::get_crgb_at(uint16_t index) {
+cRGB WS2812::getColorAt(uint16_t index) {
 
 	cRGB px_value;
 
@@ -43,7 +43,7 @@ cRGB WS2812::get_crgb_at(uint16_t index) {
 	return px_value;
 }
 
-uint8_t WS2812::set_crgb_at(uint16_t index, cRGB px_value) {
+uint8_t WS2812::setColorAt(uint16_t index, cRGB px_value) {
 
 	if(index < count_led) {
 
@@ -58,7 +58,7 @@ uint8_t WS2812::set_crgb_at(uint16_t index, cRGB px_value) {
 	return 1;
 }
 
-uint8_t WS2812::set_subpixel_at(uint16_t index, uint8_t offset, uint8_t px_value) {
+uint8_t WS2812::setSubpixelAt(uint16_t index, uint8_t offset, uint8_t px_value) {
 	if (index < count_led) {
 		uint16_t tmp;
 		tmp = index * 3;
@@ -71,7 +71,7 @@ uint8_t WS2812::set_subpixel_at(uint16_t index, uint8_t offset, uint8_t px_value
 
 void WS2812::sync() {
 	*ws2812_port_reg |= pinMask; // Enable DDR
-	ws2812_sendarray_mask(pixels, 3*count_led, pinMask,(uint8_t*) ws2812_port);
+	lowlevelSend(pixels, 3*count_led, pinMask,(uint8_t*) ws2812_port);
 }
 
 #ifdef RGB_ORDER_ON_RUNTIME

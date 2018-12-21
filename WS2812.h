@@ -52,9 +52,10 @@ public:
 	void setOutput(uint8_t pin);
 	#endif
 
-	cRGB get_crgb_at(uint16_t index);
-	uint8_t set_crgb_at(uint16_t index, cRGB px_value);
-	uint8_t set_subpixel_at(uint16_t index, uint8_t offset, uint8_t px_value);
+	uint16_t getLength() { return count_led; };
+	cRGB getColorAt(uint16_t index);
+	uint8_t setColorAt(uint16_t index, cRGB px_value);
+	uint8_t setSubpixelAt(uint16_t index, uint8_t offset, uint8_t px_value);
 
 	void sync();
 
@@ -74,7 +75,7 @@ private:
 	uint8_t offsetBlue;
 #endif
 
-	void ws2812_sendarray_mask(uint8_t *array, uint16_t length, uint8_t pinmask, uint8_t *port);
+	void lowlevelSend(uint8_t *array, uint16_t length, uint8_t pinmask, uint8_t *port);
 
 	const volatile uint8_t *ws2812_port;
 	volatile uint8_t *ws2812_port_reg;
