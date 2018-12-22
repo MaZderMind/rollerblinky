@@ -11,13 +11,19 @@ public:
 
     bool IsPressed();
 
+    bool IsPressedLong();
+
     bool IsClicked();
+
+    void TakeClick();
 
 private:
     uint8_t pressedCounter = 0;
     static const uint8_t COUNTER_THRESHOLD = 2;
+    static const uint8_t COUNTER_THRESHOLD_LONG = 20;
 
     bool isClicked = false;
+    bool clickTaken = false;
 
     const volatile uint8_t *port;
     uint8_t pin;

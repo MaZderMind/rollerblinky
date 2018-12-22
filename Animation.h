@@ -6,21 +6,24 @@
 
 enum ANIMATION {
     FIRE,
-    POLICE
+    POLICE,
+    RAINBOW,
+    ZEBRA
 };
 
 class Animation {
 public:
-    void fire(WS2812 *ledStrip, uint16_t time);
+    static void fire(WS2812 *ledStrip, uint16_t time);
 
-    void fireFront(WS2812 *ledStrip, uint16_t time);
+    static void fireFront(WS2812 *ledStrip, uint16_t time);
 
-    void police(WS2812 *ledStrip, uint16_t time);
+    static void police(WS2812 *ledStrip, uint16_t time);
 
-    void policeFront(WS2812 *ledStrip, uint16_t time);
+    static void policeFront(WS2812 *ledStrip, uint16_t time);
 
-private:
-    uint16_t rainbow_hue;
+    static void rainbow(WS2812 *ledStrip, uint16_t time);
+
+    static void zebra(WS2812 *ledStrip, uint16_t time);
 };
 
 #endif

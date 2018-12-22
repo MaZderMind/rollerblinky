@@ -15,7 +15,7 @@ Debounce::Debounce(volatile const uint8_t *port, volatile uint8_t *reg, uint8_t 
 
 void Debounce::Tick() {
     if (BITSET(*port, pin)) {
-        if (pressedCounter <= Debounce::COUNTER_THRESHOLD) {
+        if (pressedCounter < 255) {
             pressedCounter++;
         }
     } else {
@@ -27,16 +27,33 @@ bool Debounce::IsPressed() {
     return pressedCounter >= Debounce::COUNTER_THRESHOLD;
 }
 
+bool Debounce::IsPressedLong() {
+    return pressedCounter >= Debounce::COUNTER_THRESHOLD_LONG;
+}
+
 bool Debounce::IsClicked() {
     if (IsPressed()) {
         if (!isClicked) {
             isClicked = true;
-            return true;
+            return false;
         } else {
             return false;
         }
     } else {
-        isClicked = false;
+        if (isClicked) {
+            isClicked = false;
+            if (clickTaken) {
+                clickTaken = false;
+                return false;
+            } else {
+                return true;
+            }
+        }
+
         return false;
     }
+}
+
+void Debounce::TakeClick() {
+    clickTaken = true;
 }

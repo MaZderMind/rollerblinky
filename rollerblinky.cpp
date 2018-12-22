@@ -9,33 +9,71 @@
 #define LED_COUNT_LONG 13
 #define LED_COUNT_SHORT 5
 
-WS2812 ledA(LED_COUNT_LONG);
-WS2812 ledB(LED_COUNT_SHORT);
-WS2812 ledC(LED_COUNT_LONG);
+WS2812 ledLeft(LED_COUNT_LONG);
+WS2812 ledFront(LED_COUNT_SHORT);
+WS2812 ledRight(LED_COUNT_LONG);
 
 Debounce changeAnimationKey = Debounce(&PINF, &DDRF, PF4);
 
 ANIMATION animation = ANIMATION::FIRE;
-Animation animationRunner;
+
+bool standby = false;
 
 void setup() {
-    ledA.setOutput(&PORTH, &DDRH, PH4);
-    ledB.setOutput(&PORTE, &DDRE, PE3);
-    ledC.setOutput(&PORTE, &DDRE, PE4);
+    ledLeft.setOutput(&PORTH, &DDRH, PH4);
+    ledFront.setOutput(&PORTE, &DDRE, PE3);
+    ledRight.setOutput(&PORTE, &DDRE, PE4);
 }
 
 void loop(uint16_t time) {
+    changeAnimationKey.Tick();
+    _delay_ms(1000 / 25);
+
+    if (changeAnimationKey.IsPressedLong()) {
+        standby = true;
+
+        cRGB black(0, 0, 0);
+        ledLeft.fillColor(black);
+        ledFront.fillColor(black);
+        ledRight.fillColor(black);
+
+        ledLeft.sync();
+        ledFront.sync();
+        ledRight.sync();
+
+        return;
+    } else if (standby && changeAnimationKey.IsPressed()) {
+        changeAnimationKey.TakeClick();
+        standby = false;
+        return;
+    }
+    if (standby) {
+        return;
+    }
+
     switch (animation) {
         case ANIMATION::FIRE:
-            animationRunner.fire(&ledA, time);
-            animationRunner.fireFront(&ledB, time);
-            animationRunner.fire(&ledC, time);
+            Animation::fire(&ledLeft, time);
+            Animation::fireFront(&ledFront, time);
+            Animation::fire(&ledRight, time);
             break;
 
         case ANIMATION::POLICE:
-            animationRunner.police(&ledA, time);
-            animationRunner.policeFront(&ledB, time);
-            animationRunner.police(&ledC, time);
+            Animation::police(&ledLeft, time);
+            Animation::policeFront(&ledFront, time);
+            Animation::police(&ledRight, time);
+            break;
+
+        case ANIMATION::RAINBOW:
+            Animation::rainbow(&ledLeft, time);
+            Animation::rainbow(&ledFront, time);
+            Animation::rainbow(&ledRight, time);
+            break;
+
+        case ANIMATION::ZEBRA:
+            Animation::zebra(&ledLeft, time);
+            Animation::zebra(&ledFront, time);
+            Animation::zebra(&ledRight, time);
             break;
     }
 
@@ -46,18 +84,22 @@ void loop(uint16_t time) {
                 break;
 
             case ANIMATION::POLICE:
+                animation = ANIMATION::RAINBOW;
+                break;
+
+            case ANIMATION::RAINBOW:
+                animation = ANIMATION::ZEBRA;
+                break;
+
+            case ANIMATION::ZEBRA:
                 animation = ANIMATION::FIRE;
                 break;
         }
     }
 
-    ledA.sync();
-    ledB.sync();
-    ledC.sync();
-
-    changeAnimationKey.Tick();
-
-    _delay_ms(1000 / 25);
+    ledLeft.sync();
+    ledFront.sync();
+    ledRight.sync();
 }
 
 int main() {

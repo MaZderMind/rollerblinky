@@ -54,6 +54,7 @@ public:
 
 	uint16_t getLength() { return count_led; };
 	cRGB getColorAt(uint16_t index);
+
 	void setColorAt(uint16_t index, cRGB px_value);
 	void pushColor(cRGB px_value);
 	void fillColor(cRGB px_value);

@@ -19,7 +19,7 @@ void Animation::fireFront(WS2812 *ledStrip, uint16_t time) {
 void Animation::police(WS2812 *ledStrip, uint16_t time) {
     cRGB color;
     uint8_t sequence = time % 64;
-    if (sequence < 16) {
+    if (sequence < 24) {
         if (sequence % 4 < 2) {
             color.SetRGB(0, 0, 255);
         } else {
@@ -50,5 +50,22 @@ void Animation::policeFront(WS2812 *ledStrip, uint16_t time) {
         color.SetRGB(255, 0, 0);
     }
 
+    ledStrip->pushColor(color);
+}
+
+void Animation::rainbow(WS2812 *ledStrip, uint16_t time) {
+    uint8_t div = 10;
+    uint16_t hue = time % div * (360 / div);
+    cRGB color;
+    color.SetHSV(hue);
+    ledStrip->pushColor(color);
+}
+
+void Animation::zebra(WS2812 *ledStrip, uint16_t time) {
+    bool bw = time % 16 < 4;
+    uint8_t value = bw ? 255 : 0;
+
+    cRGB color;
+    color.SetRGB(value, value, value);
     ledStrip->pushColor(color);
 }
