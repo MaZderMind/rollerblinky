@@ -31,58 +31,67 @@
 #include "cRGB.h"
 
 #ifdef RGB_ORDER_ON_RUNTIME
-	#define OFFSET_R(r) r+offsetRed
-	#define OFFSET_G(g) g+offsetGreen
-	#define OFFSET_B(b) b+offsetBlue
+#define OFFSET_R(r) r+offsetRed
+#define OFFSET_G(g) g+offsetGreen
+#define OFFSET_B(b) b+offsetBlue
 #else
 // CHANGE YOUR STATIC RGB ORDER HERE
-	#define OFFSET_R(r) r+1
-	#define OFFSET_G(g) g
-	#define OFFSET_B(b) b+2
+#define OFFSET_R(r) r+1
+#define OFFSET_G(g) g
+#define OFFSET_B(b) b+2
 #endif
 
 class WS2812 {
 public:
-	WS2812(uint16_t num_led);
-	~WS2812();
+    WS2812(uint16_t num_led);
 
-	#ifndef ARDUINO
-	void setOutput(const volatile uint8_t* port, volatile uint8_t* reg, uint8_t pin);
-	#else
-	void setOutput(uint8_t pin);
-	#endif
+    ~WS2812();
 
-	uint16_t getLength() { return count_led; };
-	cRGB getColorAt(uint16_t index);
+#ifndef ARDUINO
 
-	void setColorAt(uint16_t index, cRGB px_value);
-	void pushColor(cRGB px_value);
-	void fillColor(cRGB px_value);
-	void setSubpixelAt(uint16_t index, uint8_t offset, uint8_t px_value);
+    void setOutput(const volatile uint8_t *port, volatile uint8_t *reg, uint8_t pin);
 
-	void sync();
+#else
+    void setOutput(uint8_t pin);
+#endif
+
+    uint16_t getLength() { return count_led; };
+
+    cRGB getColorAt(uint16_t index);
+
+    void setColorAt(uint16_t index, cRGB px_value);
+
+    void pushColor(cRGB px_value);
+
+    void backPushColor(cRGB px_value);
+
+    void fillColor(cRGB px_value);
+
+    void setSubpixelAt(uint16_t index, uint8_t offset, uint8_t px_value);
+
+    void sync();
 
 #ifdef RGB_ORDER_ON_RUNTIME
-	void setColorOrderRGB();
-	void setColorOrderGRB();
-	void setColorOrderBRG();
+    void setColorOrderRGB();
+    void setColorOrderGRB();
+    void setColorOrderBRG();
 #endif
 
 private:
-	uint16_t count_led;
-	uint8_t *pixels;
+    uint16_t count_led;
+    uint8_t *pixels;
 
 #ifdef RGB_ORDER_ON_RUNTIME
-	uint8_t offsetRed;
-	uint8_t offsetGreen;
-	uint8_t offsetBlue;
+    uint8_t offsetRed;
+    uint8_t offsetGreen;
+    uint8_t offsetBlue;
 #endif
 
-	void lowlevelSend(uint8_t *array, uint16_t length, uint8_t pinmask, uint8_t *port);
+    void lowlevelSend(uint8_t *array, uint16_t length, uint8_t pinmask, uint8_t *port);
 
-	const volatile uint8_t *ws2812_port;
-	volatile uint8_t *ws2812_port_reg;
-	uint8_t pinMask;
+    const volatile uint8_t *ws2812_port;
+    volatile uint8_t *ws2812_port_reg;
+    uint8_t pinMask;
 };
 
 #endif /* WS2812_H_ */

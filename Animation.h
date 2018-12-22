@@ -8,14 +8,15 @@ enum ANIMATION {
     FIRE,
     POLICE,
     RAINBOW,
-    ZEBRA
+    ZEBRA,
+    ALIEN
 };
 
 class Animation {
 public:
-    static void fire(WS2812 *ledStrip, uint16_t time);
+    static void fire(WS2812 *ledStrip);
 
-    static void fireFront(WS2812 *ledStrip, uint16_t time);
+    static void fireFront(WS2812 *ledStrip);
 
     static void police(WS2812 *ledStrip, uint16_t time);
 
@@ -24,6 +25,8 @@ public:
     static void rainbow(WS2812 *ledStrip, uint16_t time);
 
     static void zebra(WS2812 *ledStrip, uint16_t time);
+
+    static void alien(WS2812 *ledStrip, uint16_t time, bool reverse);
 };
 
 #endif

@@ -1,7 +1,13 @@
 #include "Animation.h"
 #include <stdlib.h>
 
-void Animation::fire(WS2812 *ledStrip, uint16_t time) {
+#define SINE_TABLE_LENGTH 13
+static const uint8_t SINE_TABLE[SINE_TABLE_LENGTH] = {
+        0x80, 0xbf, 0xee, 0xff, 0xee, 0xbf, 0x80, 0x40,
+        0x11, 0x0, 0x11, 0x40, 0x80,
+};
+
+void Animation::fire(WS2812 *ledStrip) {
     uint16_t hue = rand() % 60;
     uint16_t val = rand() % 255;
     cRGB color;
@@ -9,7 +15,7 @@ void Animation::fire(WS2812 *ledStrip, uint16_t time) {
     ledStrip->pushColor(color);
 }
 
-void Animation::fireFront(WS2812 *ledStrip, uint16_t time) {
+void Animation::fireFront(WS2812 *ledStrip) {
     uint16_t hue = rand() % 60;
     cRGB color;
     color.SetHSV(hue);
@@ -68,4 +74,16 @@ void Animation::zebra(WS2812 *ledStrip, uint16_t time) {
     cRGB color;
     color.SetRGB(value, value, value);
     ledStrip->pushColor(color);
+}
+
+void Animation::alien(WS2812 *ledStrip, uint16_t time, bool reverse) {
+    uint8_t local_time = time % SINE_TABLE_LENGTH;
+    uint16_t val = SINE_TABLE[local_time];
+
+    cRGB color(0, val, 0);
+    if (reverse) {
+        ledStrip->backPushColor(color);
+    } else {
+        ledStrip->pushColor(color);
+    }
 }

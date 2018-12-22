@@ -53,9 +53,9 @@ void loop(uint16_t time) {
 
     switch (animation) {
         case ANIMATION::FIRE:
-            Animation::fire(&ledLeft, time);
-            Animation::fireFront(&ledFront, time);
-            Animation::fire(&ledRight, time);
+            Animation::fire(&ledLeft);
+            Animation::fireFront(&ledFront);
+            Animation::fire(&ledRight);
             break;
 
         case ANIMATION::POLICE:
@@ -75,6 +75,12 @@ void loop(uint16_t time) {
             Animation::zebra(&ledFront, time);
             Animation::zebra(&ledRight, time);
             break;
+
+        case ANIMATION::ALIEN:
+            Animation::alien(&ledLeft, time, false);
+            Animation::alien(&ledFront, time, false);
+            Animation::alien(&ledRight, time, true);
+            break;
     }
 
     if (changeAnimationKey.IsClicked()) {
@@ -92,6 +98,10 @@ void loop(uint16_t time) {
                 break;
 
             case ANIMATION::ZEBRA:
+                animation = ANIMATION::ALIEN;
+                break;
+
+            case ANIMATION::ALIEN:
                 animation = ANIMATION::FIRE;
                 break;
         }
