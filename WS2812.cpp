@@ -14,11 +14,13 @@
 
 #include "WS2812.h"
 #include <stdlib.h>
+#include <string.h>
 
 WS2812::WS2812(uint16_t num_leds) {
 	count_led = num_leds;
 
-	pixels = (uint8_t*)malloc(count_led*3);
+	pixels = (uint8_t*)malloc(count_led * 3);
+	memset(pixels, 0, count_led * 3);
 	#ifdef RGB_ORDER_ON_RUNTIME
 		offsetGreen = 0;
 		offsetRed = 1;
@@ -43,8 +45,28 @@ cRGB WS2812::getColorAt(uint16_t index) {
 	return px_value;
 }
 
-uint8_t WS2812::setColorAt(uint16_t index, cRGB px_value) {
+void WS2812::fillColor(cRGB px_value) {
+	for(uint16_t index = 0; index < count_led; index++) {
+		setColorAt(index, px_value);
+	}
+}
 
+void WS2812::pushColor(cRGB px_value) {
+	for(uint16_t index = count_led-1; index > 0; index--) {
+
+		uint16_t copy_from = (index - 1) * 3;
+		uint16_t copy_to = index * 3;
+
+		pixels[OFFSET_R(copy_to)] = pixels[OFFSET_R(copy_from)];
+		pixels[OFFSET_G(copy_to)] = pixels[OFFSET_G(copy_from)];
+		pixels[OFFSET_B(copy_to)] = pixels[OFFSET_B(copy_from)];
+	}
+
+	setColorAt(0, px_value);
+}
+
+
+void WS2812::setColorAt(uint16_t index, cRGB px_value) {
 	if(index < count_led) {
 
 		uint16_t tmp;
@@ -53,20 +75,16 @@ uint8_t WS2812::setColorAt(uint16_t index, cRGB px_value) {
 		pixels[OFFSET_R(tmp)] = px_value.r;
 		pixels[OFFSET_G(tmp)] = px_value.g;
 		pixels[OFFSET_B(tmp)] = px_value.b;
-		return 0;
 	}
-	return 1;
 }
 
-uint8_t WS2812::setSubpixelAt(uint16_t index, uint8_t offset, uint8_t px_value) {
+void WS2812::setSubpixelAt(uint16_t index, uint8_t offset, uint8_t px_value) {
 	if (index < count_led) {
 		uint16_t tmp;
 		tmp = index * 3;
 
 		pixels[tmp + offset] = px_value;
-		return 0;
 	}
-	return 1;
 }
 
 void WS2812::sync() {

@@ -44,6 +44,9 @@ const uint8_t dim_curve[] = {
 };
 #endif
 
+#define DEFAULT_SATURATION 255
+#define DEFAULT_VALUE 128
+
 struct cRGB {
 	uint8_t g;
 	uint8_t r;
@@ -56,6 +59,10 @@ struct cRGB {
 	}
 
 #ifdef USE_HSV
+	void SetHSV(uint16_t hue) {
+		SetHSV(hue, DEFAULT_SATURATION, DEFAULT_VALUE);
+	}
+
 	void SetHSV(uint16_t hue, uint8_t sat, uint8_t val) {
 		/* convert hue, saturation and brightness ( HSB/HSV ) to RGB
 		The dim_curve is used only on brightness/value and on saturation (inverted).

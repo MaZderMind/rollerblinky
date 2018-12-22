@@ -54,8 +54,10 @@ public:
 
 	uint16_t getLength() { return count_led; };
 	cRGB getColorAt(uint16_t index);
-	uint8_t setColorAt(uint16_t index, cRGB px_value);
-	uint8_t setSubpixelAt(uint16_t index, uint8_t offset, uint8_t px_value);
+	void setColorAt(uint16_t index, cRGB px_value);
+	void pushColor(cRGB px_value);
+	void fillColor(cRGB px_value);
+	void setSubpixelAt(uint16_t index, uint8_t offset, uint8_t px_value);
 
 	void sync();
 
