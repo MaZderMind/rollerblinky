@@ -1,6 +1,8 @@
 #include "config.h"
 #include "WS2812.h"
 #include "Animation.h"
+#include "Debounce.h"
+#include "bits.h"
 
 #include <util/delay.h>
 
@@ -11,7 +13,10 @@ WS2812 ledA(LED_COUNT_LONG);
 WS2812 ledB(LED_COUNT_SHORT);
 WS2812 ledC(LED_COUNT_LONG);
 
-ANIMATION animation = ANIMATION::POLICE;
+Debounce changeAnimationKey = Debounce(&PINF, &DDRF, PF4);
+
+ANIMATION animation = ANIMATION::FIRE;
+Animation animationRunner;
 
 void setup() {
     ledA.setOutput(&PORTH, &DDRH, PH4);
@@ -22,21 +27,35 @@ void setup() {
 void loop(uint16_t time) {
     switch (animation) {
         case ANIMATION::FIRE:
-            Animation::fire(&ledA, time);
-            Animation::fireFront(&ledB, time);
-            Animation::fire(&ledC, time);
+            animationRunner.fire(&ledA, time);
+            animationRunner.fireFront(&ledB, time);
+            animationRunner.fire(&ledC, time);
             break;
 
         case ANIMATION::POLICE:
-            Animation::police(&ledA, time);
-            Animation::policeFront(&ledB, time);
-            Animation::police(&ledC, time);
+            animationRunner.police(&ledA, time);
+            animationRunner.policeFront(&ledB, time);
+            animationRunner.police(&ledC, time);
             break;
+    }
+
+    if (changeAnimationKey.IsClicked()) {
+        switch (animation) {
+            case ANIMATION::FIRE:
+                animation = ANIMATION::POLICE;
+                break;
+
+            case ANIMATION::POLICE:
+                animation = ANIMATION::FIRE;
+                break;
+        }
     }
 
     ledA.sync();
     ledB.sync();
     ledC.sync();
+
+    changeAnimationKey.Tick();
 
     _delay_ms(1000 / 25);
 }
